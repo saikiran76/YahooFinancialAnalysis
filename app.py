@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 import pandas_datareader as web
 import datetime
 import yfinance as yf
-from keras.models import load_model
+# from keras.models import load_model
 from tensorflow.keras.models import load_model
 import streamlit as st
 
