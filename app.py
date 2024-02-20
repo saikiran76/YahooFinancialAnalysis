@@ -7,7 +7,6 @@ import pandas_datareader as web
 import datetime
 import yfinance as yf
 from keras.models import load_model
-import tenosrflow as tf
 import streamlit as st
 
 
