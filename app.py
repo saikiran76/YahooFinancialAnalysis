@@ -7,8 +7,22 @@ import pandas_datareader as web
 import datetime
 import yfinance as yf
 # from keras.models import load_model
-from tensorflow.keras.models import load_model
 import streamlit as st
+
+import sys
+from threading import Thread
+import time
+
+def loader():
+    from tensorflow.keras.models import load_model
+
+t = Thread(target=loader, args=())
+t.start()
+
+while True:
+    for module in list(sys.modules.values()):
+        getattr(module, "__file__", None)
+    time.sleep(1)
 
 
 
