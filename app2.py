@@ -27,7 +27,7 @@ except ValueError:
 st.subheader('Data from 2020 to 2023')
 st.write(df.describe())
 
-df.index = df.index.strftime('%Y-%m-%d')
+df.index = pd.Series(df.index).dt.strftime('%Y-%m-%d')
 
 fig = px.line(df, x=df.index, y='Close')
 fig.update_xaxes(title_text='Date')
