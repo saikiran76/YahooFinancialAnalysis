@@ -66,6 +66,12 @@ fig.update_xaxes(title_text='Date')
 fig.update_yaxes(title_text='Close Price')
 st.plotly_chart(fig)
 
+
+
+
+
+
+
 # Data Preparation
 data_training = pd.DataFrame(df['Close'][0:int(len(df)*0.70)])
 data_testing = pd.DataFrame(df['Close'][int(len(df)*0.70):int(len(df))])
@@ -76,6 +82,7 @@ scaler = MinMaxScaler(feature_range=(0, 1))
 data_training_arr = scaler.fit_transform(data_training)
 
 # Model Building
+from statsmodels.tsa.statespace.sarimax import SARIMAX
 model = SARIMAX(data_training_arr, order=(1,1,1), seasonal_order=(1,1,1,12))
 model_fit = model.fit()
 
@@ -85,14 +92,9 @@ final_df = pd.concat([past_100_days, data_testing], ignore_index=True)
 input_data = scaler.transform(final_df)
 
 # Making Predictions
-x_test = []
-y_test = []
+x_test = input_data[:-1]
+y_test = input_data[-1]
 
-for i in range(100, input_data.shape[0]):
-    x_test.append(input_data[i-100: i])
-    y_test.append(input_data[i, 0])
-
-x_test, y_test = np.array(x_test), np.array(y_test)
 y_predicted = model_fit.predict(start=100, end=len(input_data)-1)
 
 # Rescaling Predictions
@@ -104,6 +106,7 @@ y_test = scaler.inverse_transform(y_test.reshape(-1,1))[:,0]
 # Plotting Predictions
 # ===================
 
+import matplotlib.pyplot as plt
 plt.figure(figsize=(10, 6))
 plt.plot(y_test, 'b', label='Original Price')
 plt.plot(y_predicted, 'r', label='Predicted Price')
